@@ -6,6 +6,7 @@ import {
     findByIdService,
     searchByTitleService,
     byUserService,
+    updateService,
 } from "../services/news.service.js";
 import { ObjectId } from "mongoose";
 
@@ -50,7 +51,6 @@ export const findAll = async (req, res) => {
         const news = await findAllService(offset, limit);
         const total = await countNews();
         const currentUrl = req.baseUrl;
-        console.log(currentUrl);
 
         const next = offset + limit;
         const nextUrl =
@@ -191,6 +191,33 @@ export const byUser = async (req, res) => {
                 avatar: item.user.avatar,
             })),
         });
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+};
+
+export const update = async (req, res) => {
+    try {
+        const { title, text, banner } = req.body;
+        const { id } = req.params;
+
+        if (!title && !banner && !text) {
+            res.status(400).send({
+                message: "Submit at latest one field to update the post.",
+            });
+        }
+
+        const news = await findByIdService(id);
+
+        if (String(news.user._id) !== req.userId) {
+            res.status(400).send({
+                message: "You didn't create this post.",
+            });
+        }
+
+        await updateService(id, title, text, banner);
+
+        return res.send({ message: "Post successfully updated! XD" });
     } catch (err) {
         res.status(500).send({ message: err.message });
     }
