@@ -1,25 +1,29 @@
 {
   "name": "mern-project",
   "version": "1.0.0",
-  "description": "API for SPA Breaking News",
-  "main": "src/index.js",
+  "description": "",
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index",
-    "dev": "nodemon index"
+    "start": "node src/index",
+    "dev": "nodemon src/index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Barba2k2/MERN-Project.git"
   },
   "keywords": [],
   "author": "Barba Tech",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.1.0",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.3.1",
-    "nodemon": "^2.0.22"
+    "bcrypt": "^5.0.1",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.5.4",
+    "swagger-ui-express": "^4.5.0"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.0"
+    "nodemon": "^2.0.19"
   }
 }
