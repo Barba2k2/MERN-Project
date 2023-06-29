@@ -1,36 +1,32 @@
+import "dotenv/config";
 import jwt from "jsonwebtoken";
 import userService from "../services/user.service.js";
-import dotenv from "dotenv";
-dotenv.config();
 
-export const authMiddleware = (req, res, next) => {
-  try {
-    const { authorization } = req.headers;
+function authMiddleware(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader)
+    return res.status(401).send({ message: "The token was not informed!" });
 
-    const parts = authorization.split(" ");
+  const parts = authHeader.split(" "); /* ["Bearer", "asdasdasdadsadasd"] */
+  if (parts.length !== 2)
+    return res.status(401).send({ message: "Invalid token!" });
 
-    const [schema, token] = parts;
+  const [scheme, token] = parts;
 
-    if (schema !== "Bearer" || parts.length !== 2 || !authorization) {
-      return res.send(401);
-    }
+  if (!/^Bearer$/i.test(scheme))
+    return res.status(401).send({ message: "Malformatted Token!" });
 
-    jwt.verify(token, process.env.SECRET_JWT, async (error, decoded) => {
-      if (error) {
-        return res.status(401).send({ message: "Token Invalid" });
-      }
+  jwt.verify(token, process.env.SECRET, async (err, decoded) => {
+    if (err) return res.status(401).send({ message: "Invalid token!" });
 
-      const user = await userService.findByIdService(decoded.id);
+    const user = await userService.findByIdUserService(decoded.id);
+    if (!user || !user.id)
+      return res.status(401).send({ message: "Invalid token!" });
 
-      if (!user || !user.id) {
-        return res.status(401).send({ message: "Invalid token!" });
-      }
+    req.userId = user.id;
 
-      req.userId = user.id;
+    return next();
+  });
+}
 
-      return next();
-    });
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-};
+export default authMiddleware;
