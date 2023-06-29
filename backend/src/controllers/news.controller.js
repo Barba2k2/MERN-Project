@@ -67,10 +67,13 @@ export const findAll = async (req, res) => {
         ? `${currentUrl}?limit=${limit}&offset=${previous}`
         : null;
 
-    if (news.length === 0) {
-      return res.status(400).send({ message: "There are no registered news" });
-    }
-    res.send({
+    // if (news.length === 0) {
+    //   return res.status(400).send({ message: "There are no posts" });
+    // }
+
+    news.shift(); // Remove o 1º componente da lista
+
+    return res.send({
       nextUrl,
       previousUrl,
       limit,
