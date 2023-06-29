@@ -15,11 +15,17 @@ export const CardContainer = styled.section`
 
 export const CardBody = styled.article`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1rem;
 
-  h2{
+  div {
+    display: flex;
+    align-items: center;
+  }
+
+  h2 {
     margin-bottom: 1rem;
   }
 
@@ -35,7 +41,7 @@ export const CardFooter = styled.article`
   align-items: center;
   gap: 1rem;
 
-  div{
+  div {
     display: flex;
     align-items: center;
     gap: 0.3rem;
