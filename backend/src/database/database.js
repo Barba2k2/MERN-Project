@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 function connectDatabase() {
   mongoose
-    .connect(process.env.DATABASE_URL, {
+    .connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })

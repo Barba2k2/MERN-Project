@@ -1,27 +1,40 @@
-import { useEffect, useState } from "react";
-import { Card } from "../../components/Cards/Card";
-import { Navbar } from "../../components/NavBar/navbar";
+import { useState, useEffect } from "react";
 
-import { getAllPosts } from "../../services/postsServices";
-import { HomeBody } from "./HomeStyled";
+import { Card } from "../../components/Card/Card";
+// import { Navbar } from "../../components/Navbar/Navbar";
+import { getAllPosts, getTopPost } from "../../services/postsServices";
+import { HomeBody, HomeHeader } from "./HomeStyled";
 
 export default function Home() {
-  const [news, setNews] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [topPost, setTopPost] = useState({});
 
-  async function findaAllPosts() {
-    const response = await getAllPosts();
-    setNews(response.data.results);
+  async function findPost() {
+    const postsResponse = await getAllPosts();
+    setPosts(postsResponse.data.results);
+
+    const topPostResponse = await getTopPost();
+    setTopPost(topPostResponse.data.post);
   }
 
   useEffect(() => {
-    findaAllPosts();
-  }, [news]);
+    findPost();
+  }, []);
 
   return (
     <>
-      <Navbar />
+      <HomeHeader>
+        <Card
+          top={true}
+          title={topPost.title}
+          text={topPost.text}
+          banner={topPost.banner}
+          likes={topPost.likes}
+          comments={topPost.comments}
+        />
+      </HomeHeader>
       <HomeBody>
-        {news.map((item) => (
+        {posts.map((item) => (
           <Card
             key={item.id}
             title={item.title}
